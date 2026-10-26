@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b1326" />
+  <meta name="description" content="一只戴着骑行帽的鹈鹕骑自行车环岛，沿途用嘴接金鱼。Three.js 实时 3D。" />
+  <title>鹈鹕环岛骑行 · Pelican Island Tour</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚲</text></svg>" />
+  <link rel="stylesheet" href="./style.css" />
+  <script type="importmap">
+    { "imports": { "three": "./vendor/three/three.module.js", "three/addons/": "./vendor/three/addons/" } }
+  </script>
+</head>
+<body>
+  <canvas id="scene" aria-label="鹈鹕骑自行车的 3D 场景"></canvas>
+
+  <div id="loader" role="status" aria-live="polite">
+    <div class="loader-card">
+      <div class="loader-bird" aria-hidden="true">🦤</div>
+      <div class="loader-title">鹈鹕环岛骑行</div>
+      <div class="bar"><span id="loadbar"></span></div>
+      <div id="loadtext">正在准备...</div>
+    </div>
+  </div>
+
+  <div id="intro" hidden>
+    <div class="intro-card">
+      <h1>鹈鹕环岛骑行</h1>
+      <p class="sub">PELICAN ISLAND TOUR</p>
+      <p>一只戴着骑行帽的鹈鹕正在环岛骑行，沿路用大嘴接住漂浮的金鱼。</p>
+      <ul class="keys">
+        <li><kbd>W</kbd><kbd>S</kbd> 加速 / 刹车</li>
+        <li><kbd>A</kbd><kbd>D</kbd> 左右变道</li>
+        <li><kbd>空格</kbd> 按车铃</li>
+        <li><kbd>C</kbd> 切换镜头 · <kbd>P</kbd> 自动驾驶</li>
+        <li><kbd>T</kbd> 时间快进 · <kbd>H</kbd> 隐藏界面</li>
+        <li>拖动鼠标旋转视角（自由镜头）</li>
+      </ul>
+      <button id="start" class="primary" type="button">开始骑行 🚲</button>
+      <p class="tiny">默认自动驾驶，按任意方向键接管</p>
+    </div>
+  </div>
+
+  <div id="hud" hidden>
+    <div class="panel stats" aria-live="off">
+      <div class="stat"><span class="label">速度</span><span id="speed" class="value">0</span><span class="unit">km/h</span></div>
+      <div class="stat"><span class="label">接鱼</span><span id="score" class="value">0</span><span class="unit">条</span></div>
+      <div class="stat"><span class="label">里程</span><span id="dist" class="value">0.00</span><span class="unit">km</span></div>
+      <div class="stat"><span class="label">时间</span><span id="clock" class="value">16:30</span></div>
+    </div>
+    <div id="combo" class="combo" aria-live="polite"></div>
+    <canvas id="minimap" width="180" height="180" aria-label="小地图"></canvas>
+
+    <div class="panel controls">
+      <button type="button" id="btn-cam" title="切换镜头 (C)">🎥 <span id="cam-name">追尾</span></button>
+      <button type="button" id="btn-auto" title="自动驾驶 (P)" aria-pressed="true">🤖 自动</button>
+      <button type="button" id="btn-bell" title="车铃 (空格)">🔔</button>
+      <button type="button" id="btn-music" title="音乐 (M)" aria-pressed="true">🎵</button>
+      <button type="button" id="btn-sfx" title="音效" aria-pressed="true">🔊</button>
+      <button type="button" id="btn-shot" title="截图 (F)">📸</button>
+      <button type="button" id="btn-hide" title="隐藏界面 (H)">🙈</button>
+      <label class="tod" title="时间 (T 快进)">
+        <span aria-hidden="true">☀️</span>
+        <input id="tod" type="range" min="0" max="24" step="0.05" value="16.5" aria-label="一天中的时间" />
+        <span aria-hidden="true">🌙</span>
+      </label>
+    </div>
+
+    <div id="touch" class="touch" aria-hidden="true">
+      <div class="pad">
+        <button type="button" data-k="left">◀</button>
+        <button type="button" data-k="right">▶</button>
+      </div>
+      <div class="pad">
+        <button type="button" data-k="brake" class="wide">刹车</button>
+        <button type="button" data-k="go" class="wide go">加速</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="bubble" class="bubble" hidden></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="pops"></div>
+  <div id="fatal" hidden></div>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>
